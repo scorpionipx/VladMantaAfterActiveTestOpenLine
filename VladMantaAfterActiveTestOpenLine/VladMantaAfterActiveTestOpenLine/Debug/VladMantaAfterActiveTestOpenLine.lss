@@ -3,31 +3,31 @@ VladMantaAfterActiveTestOpenLine.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000166  00000000  00000000  00000074  2**1
+  0 .text         000001a4  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  000001da  2**0
+  1 .data         00000000  00800060  00800060  00000218  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000004  00800060  00800060  000001da  2**0
+  2 .bss          00000008  00800060  00800060  00000218  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000001da  2**0
+  3 .comment      00000030  00000000  00000000  00000218  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000020c  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000248  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000030  00000000  00000000  00000248  2**0
+  5 .debug_aranges 00000038  00000000  00000000  00000284  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000075d  00000000  00000000  00000278  2**0
+  6 .debug_info   00000811  00000000  00000000  000002bc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000604  00000000  00000000  000009d5  2**0
+  7 .debug_abbrev 00000604  00000000  00000000  00000acd  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000002df  00000000  00000000  00000fd9  2**0
+  8 .debug_line   00000339  00000000  00000000  000010d1  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000044  00000000  00000000  000012b8  2**2
+  9 .debug_frame  00000054  00000000  00000000  0000140c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000003ac  00000000  00000000  000012fc  2**0
+ 10 .debug_str    000003d9  00000000  00000000  00001460  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000013f  00000000  00000000  000016a8  2**0
+ 11 .debug_loc    000001cf  00000000  00000000  00001839  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000020  00000000  00000000  000017e7  2**0
+ 12 .debug_ranges 00000028  00000000  00000000  00001a08  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -73,27 +73,24 @@ Disassembly of section .text:
   68:	1d 92       	st	X+, r1
 
 0000006a <.do_clear_bss_start>:
-  6a:	a4 36       	cpi	r26, 0x64	; 100
+  6a:	a8 36       	cpi	r26, 0x68	; 104
   6c:	b2 07       	cpc	r27, r18
   6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
   70:	0e 94 6d 00 	call	0xda	; 0xda <main>
-  74:	0c 94 b1 00 	jmp	0x162	; 0x162 <_exit>
+  74:	0c 94 d0 00 	jmp	0x1a0	; 0x1a0 <_exit>
 
 00000078 <__bad_interrupt>:
   78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 0000007c <init_uc>:
-    }
-}
-
-void init_uc(void)
+void trigger(void)
 {
-	DDRB = 0x00;
+	_delay_ms(10);
+	SET_OUTPUT;
+	_delay_us(500);
+	RESET_OUTPUT;
   7c:	17 ba       	out	0x17, r1	; 23
-	DDRB |= 1 << OUTPUT;
   7e:	b9 9a       	sbi	0x17, 1	; 23
-	
-	PORTB = 0x00;
   80:	18 ba       	out	0x18, r1	; 24
   82:	08 95       	ret
 
@@ -123,35 +120,35 @@ void get_max_val_of_counter(int filter_rank)
   94:	0b c0       	rjmp	.+22     	; 0xac <get_max_val_of_counter+0x28>
 		{
 			counter ++;
-  96:	20 91 62 00 	lds	r18, 0x0062	; 0x800062 <counter>
-  9a:	30 91 63 00 	lds	r19, 0x0063	; 0x800063 <counter+0x1>
+  96:	20 91 66 00 	lds	r18, 0x0066	; 0x800066 <counter>
+  9a:	30 91 67 00 	lds	r19, 0x0067	; 0x800067 <counter+0x1>
   9e:	2f 5f       	subi	r18, 0xFF	; 255
   a0:	3f 4f       	sbci	r19, 0xFF	; 255
-  a2:	30 93 63 00 	sts	0x0063, r19	; 0x800063 <counter+0x1>
-  a6:	20 93 62 00 	sts	0x0062, r18	; 0x800062 <counter>
+  a2:	30 93 67 00 	sts	0x0067, r19	; 0x800067 <counter+0x1>
+  a6:	20 93 66 00 	sts	0x0066, r18	; 0x800066 <counter>
   aa:	13 c0       	rjmp	.+38     	; 0xd2 <get_max_val_of_counter+0x4e>
 			//SET_OUTPUT;
 		}
 		else
 		{
 			if(counter > max_counter)
-  ac:	20 91 62 00 	lds	r18, 0x0062	; 0x800062 <counter>
-  b0:	30 91 63 00 	lds	r19, 0x0063	; 0x800063 <counter+0x1>
-  b4:	40 91 60 00 	lds	r20, 0x0060	; 0x800060 <_edata>
-  b8:	50 91 61 00 	lds	r21, 0x0061	; 0x800061 <_edata+0x1>
+  ac:	20 91 66 00 	lds	r18, 0x0066	; 0x800066 <counter>
+  b0:	30 91 67 00 	lds	r19, 0x0067	; 0x800067 <counter+0x1>
+  b4:	40 91 64 00 	lds	r20, 0x0064	; 0x800064 <max_counter>
+  b8:	50 91 65 00 	lds	r21, 0x0065	; 0x800065 <max_counter+0x1>
   bc:	42 17       	cp	r20, r18
   be:	53 07       	cpc	r21, r19
   c0:	20 f4       	brcc	.+8      	; 0xca <get_max_val_of_counter+0x46>
 			{
 				max_counter = counter;
-  c2:	30 93 61 00 	sts	0x0061, r19	; 0x800061 <_edata+0x1>
-  c6:	20 93 60 00 	sts	0x0060, r18	; 0x800060 <_edata>
+  c2:	30 93 65 00 	sts	0x0065, r19	; 0x800065 <max_counter+0x1>
+  c6:	20 93 64 00 	sts	0x0064, r18	; 0x800064 <max_counter>
 			}
 			counter = 0;
-  ca:	10 92 63 00 	sts	0x0063, r1	; 0x800063 <counter+0x1>
-  ce:	10 92 62 00 	sts	0x0062, r1	; 0x800062 <counter>
+  ca:	10 92 67 00 	sts	0x0067, r1	; 0x800067 <counter+0x1>
+  ce:	10 92 66 00 	sts	0x0066, r1	; 0x800066 <counter>
   d2:	01 97       	sbiw	r24, 0x01	; 1
-	PORTB = 0x00;
+	RESET_OUTPUT;
 }
 
 void get_max_val_of_counter(int filter_rank)
@@ -167,7 +164,7 @@ void get_max_val_of_counter(int filter_rank)
   d8:	08 95       	ret
 
 000000da <main>:
-void get_max_val_of_counter();
+void trigger(void);
 
 int main(void)
 {
@@ -195,72 +192,122 @@ int main(void)
   f2:	97 e2       	ldi	r25, 0x27	; 39
   f4:	0e 94 42 00 	call	0x84	; 0x84 <get_max_val_of_counter>
 	max_counter -= COUNTER_TOLERANCE;
-  f8:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
-  fc:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
+  f8:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <max_counter>
+  fc:	90 91 65 00 	lds	r25, 0x0065	; 0x800065 <max_counter+0x1>
  100:	44 97       	sbiw	r24, 0x14	; 20
- 102:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <_edata+0x1>
- 106:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <_edata>
+ 102:	90 93 65 00 	sts	0x0065, r25	; 0x800065 <max_counter+0x1>
+ 106:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <max_counter>
+					SET_OUTPUT;
+					//_delay_us(500);
+					//RESET_OUTPUT;
+				}
+			}
+			level = HIGH;
+ 10a:	41 e0       	ldi	r20, 0x01	; 1
+ 10c:	50 e0       	ldi	r21, 0x00	; 0
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 10a:	8f e1       	ldi	r24, 0x1F	; 31
- 10c:	93 e0       	ldi	r25, 0x03	; 3
- 10e:	01 97       	sbiw	r24, 0x01	; 1
- 110:	f1 f7       	brne	.-4      	; 0x10e <main+0x34>
- 112:	00 c0       	rjmp	.+0      	; 0x114 <main+0x3a>
- 114:	00 00       	nop
+ 10e:	8f e1       	ldi	r24, 0x1F	; 31
+ 110:	93 e0       	ldi	r25, 0x03	; 3
+ 112:	01 97       	sbiw	r24, 0x01	; 1
+ 114:	f1 f7       	brne	.-4      	; 0x112 <main+0x38>
+ 116:	00 c0       	rjmp	.+0      	; 0x118 <main+0x3e>
+ 118:	00 00       	nop
+	max_counter -= COUNTER_TOLERANCE;
 	
     while (1) 
     {
 		_delay_us(200);
 		if(INPUT)
- 116:	b0 9b       	sbis	0x16, 0	; 22
- 118:	0a c0       	rjmp	.+20     	; 0x12e <main+0x54>
+ 11a:	b0 9b       	sbis	0x16, 0	; 22
+ 11c:	29 c0       	rjmp	.+82     	; 0x170 <main+0x96>
 		{
+			if(level == LOW)
+ 11e:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
+ 122:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
+ 126:	89 2b       	or	r24, r25
+ 128:	a9 f4       	brne	.+42     	; 0x154 <main+0x7a>
+			{
+				rising_edge ++;
+ 12a:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <rising_edge>
+ 12e:	90 91 63 00 	lds	r25, 0x0063	; 0x800063 <rising_edge+0x1>
+ 132:	01 96       	adiw	r24, 0x01	; 1
+ 134:	90 93 63 00 	sts	0x0063, r25	; 0x800063 <rising_edge+0x1>
+ 138:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <rising_edge>
+				if(rising_edge >= RISING_EDGES)
+ 13c:	09 97       	sbiw	r24, 0x09	; 9
+ 13e:	50 f0       	brcs	.+20     	; 0x154 <main+0x7a>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 140:	9f ef       	ldi	r25, 0xFF	; 255
+ 142:	27 ee       	ldi	r18, 0xE7	; 231
+ 144:	83 e0       	ldi	r24, 0x03	; 3
+ 146:	91 50       	subi	r25, 0x01	; 1
+ 148:	20 40       	sbci	r18, 0x00	; 0
+ 14a:	80 40       	sbci	r24, 0x00	; 0
+ 14c:	e1 f7       	brne	.-8      	; 0x146 <main+0x6c>
+ 14e:	00 c0       	rjmp	.+0      	; 0x150 <main+0x76>
+ 150:	00 00       	nop
+					//_delay_ms(50);
+					//SET_OUTPUT;
+					//_delay_us(500);
+					//RESET_OUTPUT;
+					_delay_ms(80);
+					SET_OUTPUT;
+ 152:	c1 9a       	sbi	0x18, 1	; 24
+					//_delay_us(500);
+					//RESET_OUTPUT;
+				}
+			}
+			level = HIGH;
+ 154:	50 93 61 00 	sts	0x0061, r21	; 0x800061 <_edata+0x1>
+ 158:	40 93 60 00 	sts	0x0060, r20	; 0x800060 <_edata>
 			counter ++;
- 11a:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <counter>
- 11e:	90 91 63 00 	lds	r25, 0x0063	; 0x800063 <counter+0x1>
- 122:	01 96       	adiw	r24, 0x01	; 1
- 124:	90 93 63 00 	sts	0x0063, r25	; 0x800063 <counter+0x1>
- 128:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <counter>
- 12c:	ee cf       	rjmp	.-36     	; 0x10a <main+0x30>
+ 15c:	80 91 66 00 	lds	r24, 0x0066	; 0x800066 <counter>
+ 160:	90 91 67 00 	lds	r25, 0x0067	; 0x800067 <counter+0x1>
+ 164:	01 96       	adiw	r24, 0x01	; 1
+ 166:	90 93 67 00 	sts	0x0067, r25	; 0x800067 <counter+0x1>
+ 16a:	80 93 66 00 	sts	0x0066, r24	; 0x800066 <counter>
+ 16e:	cf cf       	rjmp	.-98     	; 0x10e <main+0x34>
 			//SET_OUTPUT;
 		}
 		else
 		{
+			level = LOW;
+ 170:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <_edata+0x1>
+ 174:	10 92 60 00 	sts	0x0060, r1	; 0x800060 <_edata>
 			if(counter >= max_counter)
- 12e:	20 91 62 00 	lds	r18, 0x0062	; 0x800062 <counter>
- 132:	30 91 63 00 	lds	r19, 0x0063	; 0x800063 <counter+0x1>
- 136:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
- 13a:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
- 13e:	28 17       	cp	r18, r24
- 140:	39 07       	cpc	r19, r25
- 142:	38 f0       	brcs	.+14     	; 0x152 <main+0x78>
+ 178:	20 91 66 00 	lds	r18, 0x0066	; 0x800066 <counter>
+ 17c:	30 91 67 00 	lds	r19, 0x0067	; 0x800067 <counter+0x1>
+ 180:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <max_counter>
+ 184:	90 91 65 00 	lds	r25, 0x0065	; 0x800065 <max_counter+0x1>
+ 188:	28 17       	cp	r18, r24
+ 18a:	39 07       	cpc	r19, r25
+ 18c:	20 f0       	brcs	.+8      	; 0x196 <main+0xbc>
 			{
-				SET_OUTPUT;
- 144:	c1 9a       	sbi	0x18, 1	; 24
- 146:	8f ec       	ldi	r24, 0xCF	; 207
- 148:	97 e0       	ldi	r25, 0x07	; 7
- 14a:	01 97       	sbiw	r24, 0x01	; 1
- 14c:	f1 f7       	brne	.-4      	; 0x14a <main+0x70>
- 14e:	00 c0       	rjmp	.+0      	; 0x150 <main+0x76>
- 150:	00 00       	nop
-				_delay_us(500);
+				rising_edge = 0;
+ 18e:	10 92 63 00 	sts	0x0063, r1	; 0x800063 <rising_edge+0x1>
+ 192:	10 92 62 00 	sts	0x0062, r1	; 0x800062 <rising_edge>
+				//SET_OUTPUT;
+				//_delay_us(500);
+				//trigger();
+				//SET_OUTPUT;
 			}
 			counter = 0;
- 152:	10 92 63 00 	sts	0x0063, r1	; 0x800063 <counter+0x1>
- 156:	10 92 62 00 	sts	0x0062, r1	; 0x800062 <counter>
-			RESET_OUTPUT;
- 15a:	88 b3       	in	r24, 0x18	; 24
- 15c:	81 70       	andi	r24, 0x01	; 1
- 15e:	88 bb       	out	0x18, r24	; 24
- 160:	d4 cf       	rjmp	.-88     	; 0x10a <main+0x30>
+ 196:	10 92 67 00 	sts	0x0067, r1	; 0x800067 <counter+0x1>
+ 19a:	10 92 66 00 	sts	0x0066, r1	; 0x800066 <counter>
+ 19e:	b7 cf       	rjmp	.-146    	; 0x10e <main+0x34>
 
-00000162 <_exit>:
- 162:	f8 94       	cli
+000001a0 <_exit>:
+ 1a0:	f8 94       	cli
 
-00000164 <__stop_program>:
- 164:	ff cf       	rjmp	.-2      	; 0x164 <__stop_program>
+000001a2 <__stop_program>:
+ 1a2:	ff cf       	rjmp	.-2      	; 0x1a2 <__stop_program>
