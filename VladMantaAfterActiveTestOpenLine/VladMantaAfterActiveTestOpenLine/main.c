@@ -19,6 +19,7 @@
 #define HIGH 1
 
 #define RISING_EDGES 9
+#define TIME_TO_WAIT_MS 92
 
 
 
@@ -54,7 +55,7 @@ int main(void)
 					//SET_OUTPUT;
 					//_delay_us(500);
 					//RESET_OUTPUT;
-					_delay_ms(80);
+					_delay_ms(TIME_TO_WAIT_MS);
 					SET_OUTPUT;
 					//_delay_us(500);
 					//RESET_OUTPUT;
