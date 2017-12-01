@@ -3,31 +3,31 @@ VladMantaAfterActiveTestOpenLine.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000001a4  00000000  00000000  00000074  2**1
+  0 .text         000003d4  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  00000218  2**0
+  1 .data         00000000  00800060  00800060  00000448  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000008  00800060  00800060  00000218  2**0
+  2 .bss          0000000e  00800060  00800060  00000448  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000218  2**0
+  3 .comment      00000030  00000000  00000000  00000448  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000248  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000478  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000038  00000000  00000000  00000284  2**0
+  5 .debug_aranges 00000050  00000000  00000000  000004b4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000811  00000000  00000000  000002bc  2**0
+  6 .debug_info   00000bef  00000000  00000000  00000504  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000604  00000000  00000000  00000acd  2**0
+  7 .debug_abbrev 00000650  00000000  00000000  000010f3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000339  00000000  00000000  000010d1  2**0
+  8 .debug_line   0000053c  00000000  00000000  00001743  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000054  00000000  00000000  0000140c  2**2
+  9 .debug_frame  00000084  00000000  00000000  00001c80  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000003d9  00000000  00000000  00001460  2**0
+ 10 .debug_str    00000453  00000000  00000000  00001d04  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000001cf  00000000  00000000  00001839  2**0
+ 11 .debug_loc    000005ca  00000000  00000000  00002157  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000028  00000000  00000000  00001a08  2**0
+ 12 .debug_ranges 00000040  00000000  00000000  00002721  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -73,241 +73,562 @@ Disassembly of section .text:
   68:	1d 92       	st	X+, r1
 
 0000006a <.do_clear_bss_start>:
-  6a:	a8 36       	cpi	r26, 0x68	; 104
+  6a:	ae 36       	cpi	r26, 0x6E	; 110
   6c:	b2 07       	cpc	r27, r18
   6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
-  70:	0e 94 6d 00 	call	0xda	; 0xda <main>
-  74:	0c 94 d0 00 	jmp	0x1a0	; 0x1a0 <_exit>
+  70:	0e 94 f7 00 	call	0x1ee	; 0x1ee <main>
+  74:	0c 94 e8 01 	jmp	0x3d0	; 0x3d0 <_exit>
 
 00000078 <__bad_interrupt>:
   78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 0000007c <init_uc>:
-void trigger(void)
+	}
+}
+
+void load_configuration(void)
 {
-	_delay_ms(10);
-	SET_OUTPUT;
-	_delay_us(500);
-	RESET_OUTPUT;
+	if(bit_is_clear(PINB, 2))
   7c:	17 ba       	out	0x17, r1	; 23
   7e:	b9 9a       	sbi	0x17, 1	; 23
   80:	18 ba       	out	0x18, r1	; 24
-  82:	08 95       	ret
+  82:	8f e3       	ldi	r24, 0x3F	; 63
+  84:	84 bb       	out	0x14, r24	; 20
+  86:	15 ba       	out	0x15, r1	; 21
+  88:	80 e8       	ldi	r24, 0x80	; 128
+  8a:	81 bb       	out	0x11, r24	; 17
+  8c:	12 ba       	out	0x12, r1	; 18
+  8e:	08 95       	ret
 
-00000084 <get_max_val_of_counter>:
+00000090 <get_max_val_of_counter>:
+  90:	27 c0       	rjmp	.+78     	; 0xe0 <get_max_val_of_counter+0x50>
+  92:	ef e1       	ldi	r30, 0x1F	; 31
+  94:	f3 e0       	ldi	r31, 0x03	; 3
+  96:	31 97       	sbiw	r30, 0x01	; 1
+  98:	f1 f7       	brne	.-4      	; 0x96 <get_max_val_of_counter+0x6>
+  9a:	00 c0       	rjmp	.+0      	; 0x9c <get_max_val_of_counter+0xc>
+  9c:	00 00       	nop
+  9e:	b0 9b       	sbis	0x16, 0	; 22
+  a0:	0b c0       	rjmp	.+22     	; 0xb8 <get_max_val_of_counter+0x28>
+  a2:	20 91 6c 00 	lds	r18, 0x006C	; 0x80006c <counter>
+  a6:	30 91 6d 00 	lds	r19, 0x006D	; 0x80006d <counter+0x1>
+  aa:	2f 5f       	subi	r18, 0xFF	; 255
+  ac:	3f 4f       	sbci	r19, 0xFF	; 255
+  ae:	30 93 6d 00 	sts	0x006D, r19	; 0x80006d <counter+0x1>
+  b2:	20 93 6c 00 	sts	0x006C, r18	; 0x80006c <counter>
+  b6:	13 c0       	rjmp	.+38     	; 0xde <get_max_val_of_counter+0x4e>
+  b8:	20 91 6c 00 	lds	r18, 0x006C	; 0x80006c <counter>
+  bc:	30 91 6d 00 	lds	r19, 0x006D	; 0x80006d <counter+0x1>
+  c0:	40 91 6a 00 	lds	r20, 0x006A	; 0x80006a <max_counter>
+  c4:	50 91 6b 00 	lds	r21, 0x006B	; 0x80006b <max_counter+0x1>
+  c8:	42 17       	cp	r20, r18
+  ca:	53 07       	cpc	r21, r19
+  cc:	20 f4       	brcc	.+8      	; 0xd6 <get_max_val_of_counter+0x46>
+  ce:	30 93 6b 00 	sts	0x006B, r19	; 0x80006b <max_counter+0x1>
+  d2:	20 93 6a 00 	sts	0x006A, r18	; 0x80006a <max_counter>
+  d6:	10 92 6d 00 	sts	0x006D, r1	; 0x80006d <counter+0x1>
+  da:	10 92 6c 00 	sts	0x006C, r1	; 0x80006c <counter>
+  de:	01 97       	sbiw	r24, 0x01	; 1
+  e0:	00 97       	sbiw	r24, 0x00	; 0
+  e2:	b9 f6       	brne	.-82     	; 0x92 <get_max_val_of_counter+0x2>
+  e4:	08 95       	ret
+
+000000e6 <dynamic_delay_ms>:
+  e6:	00 97       	sbiw	r24, 0x00	; 0
+  e8:	41 f0       	breq	.+16     	; 0xfa <dynamic_delay_ms+0x14>
+  ea:	ef e9       	ldi	r30, 0x9F	; 159
+  ec:	ff e0       	ldi	r31, 0x0F	; 15
+  ee:	31 97       	sbiw	r30, 0x01	; 1
+  f0:	f1 f7       	brne	.-4      	; 0xee <dynamic_delay_ms+0x8>
+  f2:	00 c0       	rjmp	.+0      	; 0xf4 <dynamic_delay_ms+0xe>
+  f4:	00 00       	nop
+  f6:	01 97       	sbiw	r24, 0x01	; 1
+  f8:	c1 f7       	brne	.-16     	; 0xea <dynamic_delay_ms+0x4>
+  fa:	08 95       	ret
+
+000000fc <configuration_check>:
+	}
 }
 
-void get_max_val_of_counter(int filter_rank)
+void configuration_check(void)
 {
-	while(filter_rank --)
-  84:	27 c0       	rjmp	.+78     	; 0xd4 <get_max_val_of_counter+0x50>
+	SET_LED_A;
+  fc:	ad 9a       	sbi	0x15, 5	; 21
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  86:	ef e1       	ldi	r30, 0x1F	; 31
-  88:	f3 e0       	ldi	r31, 0x03	; 3
-  8a:	31 97       	sbiw	r30, 0x01	; 1
-  8c:	f1 f7       	brne	.-4      	; 0x8a <get_max_val_of_counter+0x6>
-  8e:	00 c0       	rjmp	.+0      	; 0x90 <get_max_val_of_counter+0xc>
-  90:	00 00       	nop
-	{
-		_delay_us(200);
-		if(INPUT)
-  92:	b0 9b       	sbis	0x16, 0	; 22
-  94:	0b c0       	rjmp	.+22     	; 0xac <get_max_val_of_counter+0x28>
-		{
-			counter ++;
-  96:	20 91 66 00 	lds	r18, 0x0066	; 0x800066 <counter>
-  9a:	30 91 67 00 	lds	r19, 0x0067	; 0x800067 <counter+0x1>
-  9e:	2f 5f       	subi	r18, 0xFF	; 255
-  a0:	3f 4f       	sbci	r19, 0xFF	; 255
-  a2:	30 93 67 00 	sts	0x0067, r19	; 0x800067 <counter+0x1>
-  a6:	20 93 66 00 	sts	0x0066, r18	; 0x800066 <counter>
-  aa:	13 c0       	rjmp	.+38     	; 0xd2 <get_max_val_of_counter+0x4e>
-			//SET_OUTPUT;
-		}
-		else
-		{
-			if(counter > max_counter)
-  ac:	20 91 66 00 	lds	r18, 0x0066	; 0x800066 <counter>
-  b0:	30 91 67 00 	lds	r19, 0x0067	; 0x800067 <counter+0x1>
-  b4:	40 91 64 00 	lds	r20, 0x0064	; 0x800064 <max_counter>
-  b8:	50 91 65 00 	lds	r21, 0x0065	; 0x800065 <max_counter+0x1>
-  bc:	42 17       	cp	r20, r18
-  be:	53 07       	cpc	r21, r19
-  c0:	20 f4       	brcc	.+8      	; 0xca <get_max_val_of_counter+0x46>
-			{
-				max_counter = counter;
-  c2:	30 93 65 00 	sts	0x0065, r19	; 0x800065 <max_counter+0x1>
-  c6:	20 93 64 00 	sts	0x0064, r18	; 0x800064 <max_counter>
-			}
-			counter = 0;
-  ca:	10 92 67 00 	sts	0x0067, r1	; 0x800067 <counter+0x1>
-  ce:	10 92 66 00 	sts	0x0066, r1	; 0x800066 <counter>
-  d2:	01 97       	sbiw	r24, 0x01	; 1
-	RESET_OUTPUT;
-}
+  fe:	2f ef       	ldi	r18, 0xFF	; 255
+ 100:	80 e4       	ldi	r24, 0x40	; 64
+ 102:	9a e0       	ldi	r25, 0x0A	; 10
+ 104:	21 50       	subi	r18, 0x01	; 1
+ 106:	80 40       	sbci	r24, 0x00	; 0
+ 108:	90 40       	sbci	r25, 0x00	; 0
+ 10a:	e1 f7       	brne	.-8      	; 0x104 <configuration_check+0x8>
+ 10c:	00 c0       	rjmp	.+0      	; 0x10e <configuration_check+0x12>
+ 10e:	00 00       	nop
+	_delay_ms(INIT_DELAY_MS);
+	SET_LED_B;
+ 110:	a9 9a       	sbi	0x15, 1	; 21
+ 112:	2f ef       	ldi	r18, 0xFF	; 255
+ 114:	80 e4       	ldi	r24, 0x40	; 64
+ 116:	9a e0       	ldi	r25, 0x0A	; 10
+ 118:	21 50       	subi	r18, 0x01	; 1
+ 11a:	80 40       	sbci	r24, 0x00	; 0
+ 11c:	90 40       	sbci	r25, 0x00	; 0
+ 11e:	e1 f7       	brne	.-8      	; 0x118 <configuration_check+0x1c>
+ 120:	00 c0       	rjmp	.+0      	; 0x122 <configuration_check+0x26>
+ 122:	00 00       	nop
+	_delay_ms(INIT_DELAY_MS);
+	SET_LED_C;
+ 124:	97 9a       	sbi	0x12, 7	; 18
+ 126:	2f ef       	ldi	r18, 0xFF	; 255
+ 128:	80 e4       	ldi	r24, 0x40	; 64
+ 12a:	9a e0       	ldi	r25, 0x0A	; 10
+ 12c:	21 50       	subi	r18, 0x01	; 1
+ 12e:	80 40       	sbci	r24, 0x00	; 0
+ 130:	90 40       	sbci	r25, 0x00	; 0
+ 132:	e1 f7       	brne	.-8      	; 0x12c <configuration_check+0x30>
+ 134:	00 c0       	rjmp	.+0      	; 0x136 <configuration_check+0x3a>
+ 136:	00 00       	nop
+	_delay_ms(INIT_DELAY_MS);
+	CLEAR_LED_A;
+ 138:	ad 98       	cbi	0x15, 5	; 21
+ 13a:	2f ef       	ldi	r18, 0xFF	; 255
+ 13c:	80 e4       	ldi	r24, 0x40	; 64
+ 13e:	9a e0       	ldi	r25, 0x0A	; 10
+ 140:	21 50       	subi	r18, 0x01	; 1
+ 142:	80 40       	sbci	r24, 0x00	; 0
+ 144:	90 40       	sbci	r25, 0x00	; 0
+ 146:	e1 f7       	brne	.-8      	; 0x140 <configuration_check+0x44>
+ 148:	00 c0       	rjmp	.+0      	; 0x14a <configuration_check+0x4e>
+ 14a:	00 00       	nop
+	_delay_ms(INIT_DELAY_MS);
+	CLEAR_LED_B;
+ 14c:	a9 98       	cbi	0x15, 1	; 21
+ 14e:	2f ef       	ldi	r18, 0xFF	; 255
+ 150:	80 e4       	ldi	r24, 0x40	; 64
+ 152:	9a e0       	ldi	r25, 0x0A	; 10
+ 154:	21 50       	subi	r18, 0x01	; 1
+ 156:	80 40       	sbci	r24, 0x00	; 0
+ 158:	90 40       	sbci	r25, 0x00	; 0
+ 15a:	e1 f7       	brne	.-8      	; 0x154 <configuration_check+0x58>
+ 15c:	00 c0       	rjmp	.+0      	; 0x15e <configuration_check+0x62>
+ 15e:	00 00       	nop
+	_delay_ms(INIT_DELAY_MS);
+	CLEAR_LED_C;
+ 160:	97 98       	cbi	0x12, 7	; 18
+ 162:	2f ef       	ldi	r18, 0xFF	; 255
+ 164:	80 e4       	ldi	r24, 0x40	; 64
+ 166:	9a e0       	ldi	r25, 0x0A	; 10
+ 168:	21 50       	subi	r18, 0x01	; 1
+ 16a:	80 40       	sbci	r24, 0x00	; 0
+ 16c:	90 40       	sbci	r25, 0x00	; 0
+ 16e:	e1 f7       	brne	.-8      	; 0x168 <configuration_check+0x6c>
+ 170:	00 c0       	rjmp	.+0      	; 0x172 <configuration_check+0x76>
+ 172:	00 00       	nop
+	_delay_ms(INIT_DELAY_MS);
+	SET_LED_A;
+ 174:	ad 9a       	sbi	0x15, 5	; 21
+ 176:	2f ef       	ldi	r18, 0xFF	; 255
+ 178:	80 e4       	ldi	r24, 0x40	; 64
+ 17a:	9a e0       	ldi	r25, 0x0A	; 10
+ 17c:	21 50       	subi	r18, 0x01	; 1
+ 17e:	80 40       	sbci	r24, 0x00	; 0
+ 180:	90 40       	sbci	r25, 0x00	; 0
+ 182:	e1 f7       	brne	.-8      	; 0x17c <configuration_check+0x80>
+ 184:	00 c0       	rjmp	.+0      	; 0x186 <configuration_check+0x8a>
+ 186:	00 00       	nop
+	_delay_ms(INIT_DELAY_MS);
+	SET_LED_B;
+ 188:	a9 9a       	sbi	0x15, 1	; 21
+ 18a:	2f ef       	ldi	r18, 0xFF	; 255
+ 18c:	80 e4       	ldi	r24, 0x40	; 64
+ 18e:	9a e0       	ldi	r25, 0x0A	; 10
+ 190:	21 50       	subi	r18, 0x01	; 1
+ 192:	80 40       	sbci	r24, 0x00	; 0
+ 194:	90 40       	sbci	r25, 0x00	; 0
+ 196:	e1 f7       	brne	.-8      	; 0x190 <configuration_check+0x94>
+ 198:	00 c0       	rjmp	.+0      	; 0x19a <configuration_check+0x9e>
+ 19a:	00 00       	nop
+	_delay_ms(INIT_DELAY_MS);
+	SET_LED_C;
+ 19c:	97 9a       	sbi	0x12, 7	; 18
+ 19e:	2f ef       	ldi	r18, 0xFF	; 255
+ 1a0:	80 e4       	ldi	r24, 0x40	; 64
+ 1a2:	9a e0       	ldi	r25, 0x0A	; 10
+ 1a4:	21 50       	subi	r18, 0x01	; 1
+ 1a6:	80 40       	sbci	r24, 0x00	; 0
+ 1a8:	90 40       	sbci	r25, 0x00	; 0
+ 1aa:	e1 f7       	brne	.-8      	; 0x1a4 <configuration_check+0xa8>
+ 1ac:	00 c0       	rjmp	.+0      	; 0x1ae <configuration_check+0xb2>
+ 1ae:	00 00       	nop
+	_delay_ms(INIT_DELAY_MS);
+	CLEAR_LED_A;
+ 1b0:	ad 98       	cbi	0x15, 5	; 21
+ 1b2:	2f ef       	ldi	r18, 0xFF	; 255
+ 1b4:	80 e4       	ldi	r24, 0x40	; 64
+ 1b6:	9a e0       	ldi	r25, 0x0A	; 10
+ 1b8:	21 50       	subi	r18, 0x01	; 1
+ 1ba:	80 40       	sbci	r24, 0x00	; 0
+ 1bc:	90 40       	sbci	r25, 0x00	; 0
+ 1be:	e1 f7       	brne	.-8      	; 0x1b8 <configuration_check+0xbc>
+ 1c0:	00 c0       	rjmp	.+0      	; 0x1c2 <configuration_check+0xc6>
+ 1c2:	00 00       	nop
+	_delay_ms(INIT_DELAY_MS);
+	CLEAR_LED_B;
+ 1c4:	a9 98       	cbi	0x15, 1	; 21
+ 1c6:	2f ef       	ldi	r18, 0xFF	; 255
+ 1c8:	80 e4       	ldi	r24, 0x40	; 64
+ 1ca:	9a e0       	ldi	r25, 0x0A	; 10
+ 1cc:	21 50       	subi	r18, 0x01	; 1
+ 1ce:	80 40       	sbci	r24, 0x00	; 0
+ 1d0:	90 40       	sbci	r25, 0x00	; 0
+ 1d2:	e1 f7       	brne	.-8      	; 0x1cc <configuration_check+0xd0>
+ 1d4:	00 c0       	rjmp	.+0      	; 0x1d6 <configuration_check+0xda>
+ 1d6:	00 00       	nop
+	_delay_ms(INIT_DELAY_MS);
+	CLEAR_LED_C;
+ 1d8:	97 98       	cbi	0x12, 7	; 18
+ 1da:	2f ef       	ldi	r18, 0xFF	; 255
+ 1dc:	80 e4       	ldi	r24, 0x40	; 64
+ 1de:	9a e0       	ldi	r25, 0x0A	; 10
+ 1e0:	21 50       	subi	r18, 0x01	; 1
+ 1e2:	80 40       	sbci	r24, 0x00	; 0
+ 1e4:	90 40       	sbci	r25, 0x00	; 0
+ 1e6:	e1 f7       	brne	.-8      	; 0x1e0 <configuration_check+0xe4>
+ 1e8:	00 c0       	rjmp	.+0      	; 0x1ea <configuration_check+0xee>
+ 1ea:	00 00       	nop
+ 1ec:	08 95       	ret
 
-void get_max_val_of_counter(int filter_rank)
-{
-	while(filter_rank --)
-  d4:	00 97       	sbiw	r24, 0x00	; 0
-  d6:	b9 f6       	brne	.-82     	; 0x86 <get_max_val_of_counter+0x2>
-				max_counter = counter;
-			}
-			counter = 0;
-		}
-	}
-  d8:	08 95       	ret
-
-000000da <main>:
-void trigger(void);
+000001ee <main>:
+void configuration_check(void);
 
 int main(void)
 {
     /* Replace with your application code */
 	init_uc();
-  da:	0e 94 3e 00 	call	0x7c	; 0x7c <init_uc>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
-  de:	2f ef       	ldi	r18, 0xFF	; 255
-  e0:	81 ee       	ldi	r24, 0xE1	; 225
-  e2:	94 e0       	ldi	r25, 0x04	; 4
-  e4:	21 50       	subi	r18, 0x01	; 1
-  e6:	80 40       	sbci	r24, 0x00	; 0
-  e8:	90 40       	sbci	r25, 0x00	; 0
-  ea:	e1 f7       	brne	.-8      	; 0xe4 <main+0xa>
-  ec:	00 c0       	rjmp	.+0      	; 0xee <main+0x14>
-  ee:	00 00       	nop
+ 1ee:	0e 94 3e 00 	call	0x7c	; 0x7c <init_uc>
+ 1f2:	2f ef       	ldi	r18, 0xFF	; 255
+ 1f4:	31 ee       	ldi	r19, 0xE1	; 225
+ 1f6:	84 e0       	ldi	r24, 0x04	; 4
+ 1f8:	21 50       	subi	r18, 0x01	; 1
+ 1fa:	30 40       	sbci	r19, 0x00	; 0
+ 1fc:	80 40       	sbci	r24, 0x00	; 0
+ 1fe:	e1 f7       	brne	.-8      	; 0x1f8 <main+0xa>
+ 200:	00 c0       	rjmp	.+0      	; 0x202 <main+0x14>
+ 202:	00 00       	nop
 	_delay_ms(100);
+	configuration_check();
+ 204:	0e 94 7e 00 	call	0xfc	; 0xfc <configuration_check>
+	
+	SET_LED_A;
+ 208:	ad 9a       	sbi	0x15, 5	; 21
+ 20a:	9f ef       	ldi	r25, 0xFF	; 255
+ 20c:	20 e7       	ldi	r18, 0x70	; 112
+ 20e:	32 e0       	ldi	r19, 0x02	; 2
+ 210:	91 50       	subi	r25, 0x01	; 1
+ 212:	20 40       	sbci	r18, 0x00	; 0
+ 214:	30 40       	sbci	r19, 0x00	; 0
+ 216:	e1 f7       	brne	.-8      	; 0x210 <main+0x22>
+ 218:	00 c0       	rjmp	.+0      	; 0x21a <main+0x2c>
+ 21a:	00 00       	nop
+ 21c:	37 c0       	rjmp	.+110    	; 0x28c <main+0x9e>
+	_delay_ms(50);
+	
+	while(bit_is_clear(PINC, 6))
+	{
+		if(!bit_is_clear(PINC, 7))
+ 21e:	9f 9b       	sbis	0x13, 7	; 19
+ 220:	35 c0       	rjmp	.+106    	; 0x28c <main+0x9e>
+		{
+			configuration ++;
+			configuration %= 3;
+ 222:	40 91 60 00 	lds	r20, 0x0060	; 0x800060 <_edata>
+ 226:	50 91 61 00 	lds	r21, 0x0061	; 0x800061 <_edata+0x1>
+ 22a:	4f 5f       	subi	r20, 0xFF	; 255
+ 22c:	5f 4f       	sbci	r21, 0xFF	; 255
+ 22e:	9a 01       	movw	r18, r20
+ 230:	ab ea       	ldi	r26, 0xAB	; 171
+ 232:	ba ea       	ldi	r27, 0xAA	; 170
+ 234:	0e 94 d9 01 	call	0x3b2	; 0x3b2 <__umulhisi3>
+ 238:	96 95       	lsr	r25
+ 23a:	87 95       	ror	r24
+ 23c:	9c 01       	movw	r18, r24
+ 23e:	22 0f       	add	r18, r18
+ 240:	33 1f       	adc	r19, r19
+ 242:	82 0f       	add	r24, r18
+ 244:	93 1f       	adc	r25, r19
+ 246:	9a 01       	movw	r18, r20
+ 248:	28 1b       	sub	r18, r24
+ 24a:	39 0b       	sbc	r19, r25
+ 24c:	30 93 61 00 	sts	0x0061, r19	; 0x800061 <_edata+0x1>
+ 250:	20 93 60 00 	sts	0x0060, r18	; 0x800060 <_edata>
+			switch(configuration)
+ 254:	21 30       	cpi	r18, 0x01	; 1
+ 256:	31 05       	cpc	r19, r1
+ 258:	49 f0       	breq	.+18     	; 0x26c <main+0x7e>
+ 25a:	20 f0       	brcs	.+8      	; 0x264 <main+0x76>
+ 25c:	22 30       	cpi	r18, 0x02	; 2
+ 25e:	31 05       	cpc	r19, r1
+ 260:	49 f0       	breq	.+18     	; 0x274 <main+0x86>
+ 262:	0b c0       	rjmp	.+22     	; 0x27a <main+0x8c>
+			{
+				case REF_A_CFG:
+				{
+					CLEAR_LED_B;
+ 264:	a9 98       	cbi	0x15, 1	; 21
+					CLEAR_LED_C;
+ 266:	97 98       	cbi	0x12, 7	; 18
+					SET_LED_A;
+ 268:	ad 9a       	sbi	0x15, 5	; 21
+					break;
+ 26a:	07 c0       	rjmp	.+14     	; 0x27a <main+0x8c>
+				}
+				case REF_B_CFG:
+				{
+					CLEAR_LED_A;
+ 26c:	ad 98       	cbi	0x15, 5	; 21
+					CLEAR_LED_C;
+ 26e:	97 98       	cbi	0x12, 7	; 18
+					SET_LED_B;
+ 270:	a9 9a       	sbi	0x15, 1	; 21
+					break;
+ 272:	03 c0       	rjmp	.+6      	; 0x27a <main+0x8c>
+				}
+				case REF_C_CFG:
+				{
+					CLEAR_LED_A;
+ 274:	ad 98       	cbi	0x15, 5	; 21
+					CLEAR_LED_B;
+ 276:	a9 98       	cbi	0x15, 1	; 21
+					SET_LED_C;
+ 278:	97 9a       	sbi	0x12, 7	; 18
+ 27a:	3f ef       	ldi	r19, 0xFF	; 255
+ 27c:	85 ea       	ldi	r24, 0xA5	; 165
+ 27e:	9e e0       	ldi	r25, 0x0E	; 14
+ 280:	31 50       	subi	r19, 0x01	; 1
+ 282:	80 40       	sbci	r24, 0x00	; 0
+ 284:	90 40       	sbci	r25, 0x00	; 0
+ 286:	e1 f7       	brne	.-8      	; 0x280 <main+0x92>
+ 288:	00 c0       	rjmp	.+0      	; 0x28a <main+0x9c>
+ 28a:	00 00       	nop
+	configuration_check();
+	
+	SET_LED_A;
+	_delay_ms(50);
+	
+	while(bit_is_clear(PINC, 6))
+ 28c:	9e 9b       	sbis	0x13, 6	; 19
+ 28e:	c7 cf       	rjmp	.-114    	; 0x21e <main+0x30>
+			}
+			_delay_ms(300);
+		}
+	}
+	
+	switch(configuration)
+ 290:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
+ 294:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
+ 298:	81 30       	cpi	r24, 0x01	; 1
+ 29a:	91 05       	cpc	r25, r1
+ 29c:	89 f0       	breq	.+34     	; 0x2c0 <main+0xd2>
+ 29e:	18 f0       	brcs	.+6      	; 0x2a6 <main+0xb8>
+ 2a0:	02 97       	sbiw	r24, 0x02	; 2
+ 2a2:	d9 f0       	breq	.+54     	; 0x2da <main+0xec>
+ 2a4:	26 c0       	rjmp	.+76     	; 0x2f2 <main+0x104>
+	{
+		case REF_A_CFG:
+		{
+			cfg_delay_after_last_psp_ms = CFG_REF_A_DELAY_AFTER_LAST_PTP_MS;
+ 2a6:	80 e5       	ldi	r24, 0x50	; 80
+ 2a8:	90 e0       	ldi	r25, 0x00	; 0
+ 2aa:	90 93 63 00 	sts	0x0063, r25	; 0x800063 <cfg_delay_after_last_psp_ms+0x1>
+ 2ae:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <cfg_delay_after_last_psp_ms>
+			cfg_number_of_rising_edges = CFG_REF_A_NUMBER_OF_RISING_EDGES;
+ 2b2:	89 e0       	ldi	r24, 0x09	; 9
+ 2b4:	90 e0       	ldi	r25, 0x00	; 0
+ 2b6:	90 93 65 00 	sts	0x0065, r25	; 0x800065 <cfg_number_of_rising_edges+0x1>
+ 2ba:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <cfg_number_of_rising_edges>
+			break;
+ 2be:	19 c0       	rjmp	.+50     	; 0x2f2 <main+0x104>
+		}
+		case REF_B_CFG:
+		{
+			cfg_delay_after_last_psp_ms = CFG_REF_B_DELAY_AFTER_LAST_PTP_MS;
+ 2c0:	88 e2       	ldi	r24, 0x28	; 40
+ 2c2:	90 e0       	ldi	r25, 0x00	; 0
+ 2c4:	90 93 63 00 	sts	0x0063, r25	; 0x800063 <cfg_delay_after_last_psp_ms+0x1>
+ 2c8:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <cfg_delay_after_last_psp_ms>
+			cfg_number_of_rising_edges = CFG_REF_B_NUMBER_OF_RISING_EDGES;
+ 2cc:	83 e0       	ldi	r24, 0x03	; 3
+ 2ce:	90 e0       	ldi	r25, 0x00	; 0
+ 2d0:	90 93 65 00 	sts	0x0065, r25	; 0x800065 <cfg_number_of_rising_edges+0x1>
+ 2d4:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <cfg_number_of_rising_edges>
+			break;
+ 2d8:	0c c0       	rjmp	.+24     	; 0x2f2 <main+0x104>
+		}
+		case REF_C_CFG:
+		{
+			cfg_delay_after_last_psp_ms = CFG_REF_C_DELAY_AFTER_LAST_PTP_MS;
+ 2da:	8e e1       	ldi	r24, 0x1E	; 30
+ 2dc:	90 e0       	ldi	r25, 0x00	; 0
+ 2de:	90 93 63 00 	sts	0x0063, r25	; 0x800063 <cfg_delay_after_last_psp_ms+0x1>
+ 2e2:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <cfg_delay_after_last_psp_ms>
+			cfg_number_of_rising_edges = CFG_REF_C_NUMBER_OF_RISING_EDGES;
+ 2e6:	84 e0       	ldi	r24, 0x04	; 4
+ 2e8:	90 e0       	ldi	r25, 0x00	; 0
+ 2ea:	90 93 65 00 	sts	0x0065, r25	; 0x800065 <cfg_number_of_rising_edges+0x1>
+ 2ee:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <cfg_number_of_rising_edges>
+		{
+			break;
+		}
+	}
+	
+	SET_LED_A;
+ 2f2:	ad 9a       	sbi	0x15, 5	; 21
+	SET_LED_B;
+ 2f4:	a9 9a       	sbi	0x15, 1	; 21
+	SET_LED_C;
+ 2f6:	97 9a       	sbi	0x12, 7	; 18
+	
 	get_max_val_of_counter(10000);
-  f0:	80 e1       	ldi	r24, 0x10	; 16
-  f2:	97 e2       	ldi	r25, 0x27	; 39
-  f4:	0e 94 42 00 	call	0x84	; 0x84 <get_max_val_of_counter>
+ 2f8:	80 e1       	ldi	r24, 0x10	; 16
+ 2fa:	97 e2       	ldi	r25, 0x27	; 39
+ 2fc:	0e 94 48 00 	call	0x90	; 0x90 <get_max_val_of_counter>
 	max_counter -= COUNTER_TOLERANCE;
-  f8:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <max_counter>
-  fc:	90 91 65 00 	lds	r25, 0x0065	; 0x800065 <max_counter+0x1>
- 100:	44 97       	sbiw	r24, 0x14	; 20
- 102:	90 93 65 00 	sts	0x0065, r25	; 0x800065 <max_counter+0x1>
- 106:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <max_counter>
-					SET_OUTPUT;
+ 300:	80 91 6a 00 	lds	r24, 0x006A	; 0x80006a <max_counter>
+ 304:	90 91 6b 00 	lds	r25, 0x006B	; 0x80006b <max_counter+0x1>
+ 308:	44 97       	sbiw	r24, 0x14	; 20
+ 30a:	90 93 6b 00 	sts	0x006B, r25	; 0x80006b <max_counter+0x1>
+ 30e:	80 93 6a 00 	sts	0x006A, r24	; 0x80006a <max_counter>
+					CLEAR_LED_C;
 					//_delay_us(500);
 					//RESET_OUTPUT;
 				}
 			}
 			level = HIGH;
- 10a:	41 e0       	ldi	r20, 0x01	; 1
- 10c:	50 e0       	ldi	r21, 0x00	; 0
+ 312:	c1 e0       	ldi	r28, 0x01	; 1
+ 314:	d0 e0       	ldi	r29, 0x00	; 0
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 10e:	8f e1       	ldi	r24, 0x1F	; 31
- 110:	93 e0       	ldi	r25, 0x03	; 3
- 112:	01 97       	sbiw	r24, 0x01	; 1
- 114:	f1 f7       	brne	.-4      	; 0x112 <main+0x38>
- 116:	00 c0       	rjmp	.+0      	; 0x118 <main+0x3e>
- 118:	00 00       	nop
+ 316:	8f e1       	ldi	r24, 0x1F	; 31
+ 318:	93 e0       	ldi	r25, 0x03	; 3
+ 31a:	01 97       	sbiw	r24, 0x01	; 1
+ 31c:	f1 f7       	brne	.-4      	; 0x31a <main+0x12c>
+ 31e:	00 c0       	rjmp	.+0      	; 0x320 <main+0x132>
+ 320:	00 00       	nop
 	max_counter -= COUNTER_TOLERANCE;
 	
     while (1) 
     {
 		_delay_us(200);
 		if(INPUT)
- 11a:	b0 9b       	sbis	0x16, 0	; 22
- 11c:	29 c0       	rjmp	.+82     	; 0x170 <main+0x96>
+ 322:	b0 9b       	sbis	0x16, 0	; 22
+ 324:	2e c0       	rjmp	.+92     	; 0x382 <main+0x194>
 		{
 			if(level == LOW)
- 11e:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
- 122:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
- 126:	89 2b       	or	r24, r25
- 128:	a9 f4       	brne	.+42     	; 0x154 <main+0x7a>
+ 326:	80 91 66 00 	lds	r24, 0x0066	; 0x800066 <level>
+ 32a:	90 91 67 00 	lds	r25, 0x0067	; 0x800067 <level+0x1>
+ 32e:	89 2b       	or	r24, r25
+ 330:	d1 f4       	brne	.+52     	; 0x366 <main+0x178>
 			{
 				rising_edge ++;
- 12a:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <rising_edge>
- 12e:	90 91 63 00 	lds	r25, 0x0063	; 0x800063 <rising_edge+0x1>
- 132:	01 96       	adiw	r24, 0x01	; 1
- 134:	90 93 63 00 	sts	0x0063, r25	; 0x800063 <rising_edge+0x1>
- 138:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <rising_edge>
-				if(rising_edge >= RISING_EDGES)
- 13c:	09 97       	sbiw	r24, 0x09	; 9
- 13e:	50 f0       	brcs	.+20     	; 0x154 <main+0x7a>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
- 140:	9f ef       	ldi	r25, 0xFF	; 255
- 142:	27 ee       	ldi	r18, 0xE7	; 231
- 144:	83 e0       	ldi	r24, 0x03	; 3
- 146:	91 50       	subi	r25, 0x01	; 1
- 148:	20 40       	sbci	r18, 0x00	; 0
- 14a:	80 40       	sbci	r24, 0x00	; 0
- 14c:	e1 f7       	brne	.-8      	; 0x146 <main+0x6c>
- 14e:	00 c0       	rjmp	.+0      	; 0x150 <main+0x76>
- 150:	00 00       	nop
+ 332:	80 91 68 00 	lds	r24, 0x0068	; 0x800068 <rising_edge>
+ 336:	90 91 69 00 	lds	r25, 0x0069	; 0x800069 <rising_edge+0x1>
+ 33a:	01 96       	adiw	r24, 0x01	; 1
+ 33c:	90 93 69 00 	sts	0x0069, r25	; 0x800069 <rising_edge+0x1>
+ 340:	80 93 68 00 	sts	0x0068, r24	; 0x800068 <rising_edge>
+				if(rising_edge >= cfg_number_of_rising_edges)
+ 344:	20 91 64 00 	lds	r18, 0x0064	; 0x800064 <cfg_number_of_rising_edges>
+ 348:	30 91 65 00 	lds	r19, 0x0065	; 0x800065 <cfg_number_of_rising_edges+0x1>
+ 34c:	82 17       	cp	r24, r18
+ 34e:	93 07       	cpc	r25, r19
+ 350:	50 f0       	brcs	.+20     	; 0x366 <main+0x178>
+				{
 					//_delay_ms(50);
 					//SET_OUTPUT;
 					//_delay_us(500);
 					//RESET_OUTPUT;
-					_delay_ms(80);
+					dynamic_delay_ms(cfg_delay_after_last_psp_ms);
+ 352:	80 91 62 00 	lds	r24, 0x0062	; 0x800062 <cfg_delay_after_last_psp_ms>
+ 356:	90 91 63 00 	lds	r25, 0x0063	; 0x800063 <cfg_delay_after_last_psp_ms+0x1>
+ 35a:	0e 94 73 00 	call	0xe6	; 0xe6 <dynamic_delay_ms>
 					SET_OUTPUT;
- 152:	c1 9a       	sbi	0x18, 1	; 24
+ 35e:	c1 9a       	sbi	0x18, 1	; 24
+					CLEAR_LED_A;
+ 360:	ad 98       	cbi	0x15, 5	; 21
+					CLEAR_LED_B;
+ 362:	a9 98       	cbi	0x15, 1	; 21
+					CLEAR_LED_C;
+ 364:	97 98       	cbi	0x12, 7	; 18
 					//_delay_us(500);
 					//RESET_OUTPUT;
 				}
 			}
 			level = HIGH;
- 154:	50 93 61 00 	sts	0x0061, r21	; 0x800061 <_edata+0x1>
- 158:	40 93 60 00 	sts	0x0060, r20	; 0x800060 <_edata>
+ 366:	d0 93 67 00 	sts	0x0067, r29	; 0x800067 <level+0x1>
+ 36a:	c0 93 66 00 	sts	0x0066, r28	; 0x800066 <level>
 			counter ++;
- 15c:	80 91 66 00 	lds	r24, 0x0066	; 0x800066 <counter>
- 160:	90 91 67 00 	lds	r25, 0x0067	; 0x800067 <counter+0x1>
- 164:	01 96       	adiw	r24, 0x01	; 1
- 166:	90 93 67 00 	sts	0x0067, r25	; 0x800067 <counter+0x1>
- 16a:	80 93 66 00 	sts	0x0066, r24	; 0x800066 <counter>
- 16e:	cf cf       	rjmp	.-98     	; 0x10e <main+0x34>
+ 36e:	80 91 6c 00 	lds	r24, 0x006C	; 0x80006c <counter>
+ 372:	90 91 6d 00 	lds	r25, 0x006D	; 0x80006d <counter+0x1>
+ 376:	01 96       	adiw	r24, 0x01	; 1
+ 378:	90 93 6d 00 	sts	0x006D, r25	; 0x80006d <counter+0x1>
+ 37c:	80 93 6c 00 	sts	0x006C, r24	; 0x80006c <counter>
+ 380:	ca cf       	rjmp	.-108    	; 0x316 <main+0x128>
 			//SET_OUTPUT;
 		}
 		else
 		{
 			level = LOW;
- 170:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <_edata+0x1>
- 174:	10 92 60 00 	sts	0x0060, r1	; 0x800060 <_edata>
+ 382:	10 92 67 00 	sts	0x0067, r1	; 0x800067 <level+0x1>
+ 386:	10 92 66 00 	sts	0x0066, r1	; 0x800066 <level>
 			if(counter >= max_counter)
- 178:	20 91 66 00 	lds	r18, 0x0066	; 0x800066 <counter>
- 17c:	30 91 67 00 	lds	r19, 0x0067	; 0x800067 <counter+0x1>
- 180:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <max_counter>
- 184:	90 91 65 00 	lds	r25, 0x0065	; 0x800065 <max_counter+0x1>
- 188:	28 17       	cp	r18, r24
- 18a:	39 07       	cpc	r19, r25
- 18c:	20 f0       	brcs	.+8      	; 0x196 <main+0xbc>
+ 38a:	20 91 6c 00 	lds	r18, 0x006C	; 0x80006c <counter>
+ 38e:	30 91 6d 00 	lds	r19, 0x006D	; 0x80006d <counter+0x1>
+ 392:	80 91 6a 00 	lds	r24, 0x006A	; 0x80006a <max_counter>
+ 396:	90 91 6b 00 	lds	r25, 0x006B	; 0x80006b <max_counter+0x1>
+ 39a:	28 17       	cp	r18, r24
+ 39c:	39 07       	cpc	r19, r25
+ 39e:	20 f0       	brcs	.+8      	; 0x3a8 <main+0x1ba>
 			{
 				rising_edge = 0;
- 18e:	10 92 63 00 	sts	0x0063, r1	; 0x800063 <rising_edge+0x1>
- 192:	10 92 62 00 	sts	0x0062, r1	; 0x800062 <rising_edge>
+ 3a0:	10 92 69 00 	sts	0x0069, r1	; 0x800069 <rising_edge+0x1>
+ 3a4:	10 92 68 00 	sts	0x0068, r1	; 0x800068 <rising_edge>
 				//SET_OUTPUT;
 				//_delay_us(500);
 				//trigger();
 				//SET_OUTPUT;
 			}
 			counter = 0;
- 196:	10 92 67 00 	sts	0x0067, r1	; 0x800067 <counter+0x1>
- 19a:	10 92 66 00 	sts	0x0066, r1	; 0x800066 <counter>
- 19e:	b7 cf       	rjmp	.-146    	; 0x10e <main+0x34>
+ 3a8:	10 92 6d 00 	sts	0x006D, r1	; 0x80006d <counter+0x1>
+ 3ac:	10 92 6c 00 	sts	0x006C, r1	; 0x80006c <counter>
+ 3b0:	b2 cf       	rjmp	.-156    	; 0x316 <main+0x128>
 
-000001a0 <_exit>:
- 1a0:	f8 94       	cli
+000003b2 <__umulhisi3>:
+ 3b2:	a2 9f       	mul	r26, r18
+ 3b4:	b0 01       	movw	r22, r0
+ 3b6:	b3 9f       	mul	r27, r19
+ 3b8:	c0 01       	movw	r24, r0
+ 3ba:	a3 9f       	mul	r26, r19
+ 3bc:	70 0d       	add	r23, r0
+ 3be:	81 1d       	adc	r24, r1
+ 3c0:	11 24       	eor	r1, r1
+ 3c2:	91 1d       	adc	r25, r1
+ 3c4:	b2 9f       	mul	r27, r18
+ 3c6:	70 0d       	add	r23, r0
+ 3c8:	81 1d       	adc	r24, r1
+ 3ca:	11 24       	eor	r1, r1
+ 3cc:	91 1d       	adc	r25, r1
+ 3ce:	08 95       	ret
 
-000001a2 <__stop_program>:
- 1a2:	ff cf       	rjmp	.-2      	; 0x1a2 <__stop_program>
+000003d0 <_exit>:
+ 3d0:	f8 94       	cli
+
+000003d2 <__stop_program>:
+ 3d2:	ff cf       	rjmp	.-2      	; 0x3d2 <__stop_program>
