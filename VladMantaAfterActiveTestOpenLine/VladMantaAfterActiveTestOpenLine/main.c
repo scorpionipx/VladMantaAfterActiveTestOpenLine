@@ -28,12 +28,19 @@
 #define REF_B_CFG 1
 #define REF_C_CFG 2
 
+<<<<<<< HEAD
 #define CFG_REF_A_NUMBER_OF_RISING_EDGES 9
 #define CFG_REF_B_NUMBER_OF_RISING_EDGES 3
 #define CFG_REF_C_NUMBER_OF_RISING_EDGES 4
 #define CFG_REF_A_DELAY_AFTER_LAST_PTP_MS 80
 #define CFG_REF_B_DELAY_AFTER_LAST_PTP_MS 40
 #define CFG_REF_C_DELAY_AFTER_LAST_PTP_MS 30
+=======
+#define RISING_EDGES 9
+#define TIME_TO_WAIT_MS 92
+
+
+>>>>>>> 9168e017875bf2fcefc28cf9305d66a4cf46e2a3
 
 void init_uc(void);
 
@@ -146,7 +153,11 @@ int main(void)
 					//SET_OUTPUT;
 					//_delay_us(500);
 					//RESET_OUTPUT;
+<<<<<<< HEAD
 					dynamic_delay_ms(cfg_delay_after_last_psp_ms);
+=======
+					_delay_ms(TIME_TO_WAIT_MS);
+>>>>>>> 9168e017875bf2fcefc28cf9305d66a4cf46e2a3
 					SET_OUTPUT;
 					CLEAR_LED_A;
 					CLEAR_LED_B;
